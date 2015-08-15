@@ -37,11 +37,12 @@ public class GraphView extends Fragment implements GraphViewInterface {
       .beginConfig()
       .width(110)
       .height(110)
-      .fontSize(40)
-      .toUpperCase()
-      .bold()
+      .textColor(Color.BLACK)
+//      .fontSize(40)
+//      .toUpperCase()
+//      .bold()
       .endConfig()
-      .buildRect("1", Color.BLACK);
+      .buildRect("1", Color.WHITE);
 
     vertButton.setImageDrawable(textAvatarDrawable);
     return inflatedView;
