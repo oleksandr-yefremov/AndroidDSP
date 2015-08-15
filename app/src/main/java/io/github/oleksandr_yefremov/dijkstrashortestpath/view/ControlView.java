@@ -54,7 +54,7 @@ public class ControlView extends Fragment implements ControlViewInterface {
   }
 
   @Override
-  public void updateVertCount(boolean increment) {
+  public int updateVertCount(boolean increment) {
     int count = Integer.parseInt(vertCounter.getText().toString());
     if (increment && count < MAX_VERTICES) {
       count++;
@@ -62,5 +62,6 @@ public class ControlView extends Fragment implements ControlViewInterface {
       count--;
     }
     vertCounter.setText(String.valueOf(count));
+    return count;
   }
 }

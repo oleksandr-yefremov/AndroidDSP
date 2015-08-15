@@ -40,7 +40,6 @@ public class GraphLayout extends FrameLayout {
 
     int radius = centerX - paddingLeft - getChildAt(0).getMeasuredWidth()/2;
 
-
     float fraction = (float) (2 * Math.PI / childCount);
     float angle = 0;
     int x0 = centerX;

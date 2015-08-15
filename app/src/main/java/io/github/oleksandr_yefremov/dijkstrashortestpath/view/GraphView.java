@@ -21,6 +21,7 @@ public class GraphView extends Fragment implements GraphViewInterface {
 
   private View[] vertices;
   private MainPresenter presenter;
+  private ViewGroup containerLayout;
 
   public void setPresenter(MainPresenter presenter) {
     this.presenter = presenter;
@@ -29,19 +30,22 @@ public class GraphView extends Fragment implements GraphViewInterface {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    ViewGroup containerLayout = (ViewGroup) inflater.inflate(R.layout.fragment_graph, container, false);
+    containerLayout = (ViewGroup) inflater.inflate(R.layout.fragment_graph, container, false);
 
-    createVertex("1", containerLayout);
-    createVertex("2", containerLayout);
-    createVertex("3", containerLayout);
-    createVertex("4", containerLayout);
+    createVertices(4);
     return containerLayout;
   }
 
-  private void createVertex(String number, ViewGroup containerLayout) {
-//    CircularImageView vertButton = (CircularImageView) containerLayout.findViewById(R.id.vertButton);
+  private void createVertices(int number) {
+    containerLayout.removeAllViewsInLayout();
+    for (int i = 1; i < number + 1; ++i) {
+      createVertex(String.valueOf(i), containerLayout);
+    }
+  }
 
-    CircularImageView vertButton = (CircularImageView) getLayoutInflater(null).inflate(R.layout.view_vertex, containerLayout, false);
+  private void createVertex(String number, ViewGroup containerLayout) {
+    CircularImageView vertButton = (CircularImageView) getLayoutInflater(null)
+      .inflate(R.layout.view_vertex, containerLayout, false);
 
     TextDrawable textAvatarDrawable = TextDrawable
       .builder()
@@ -68,8 +72,8 @@ public class GraphView extends Fragment implements GraphViewInterface {
   }
 
   @Override
-  public void updateVertices() {
-
+  public void updateVertices(int count) {
+    createVertices(count);
   }
 
 }

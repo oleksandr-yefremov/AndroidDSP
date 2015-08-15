@@ -9,10 +9,10 @@ public class ViewInterface {
 
     public void updateEdges();
 
-    public void updateVertices();
+    public void updateVertices(int count);
   }
 
   public interface ControlViewInterface {
-    public void updateVertCount(boolean incr);
+    public int updateVertCount(boolean incr);
   }
 }
