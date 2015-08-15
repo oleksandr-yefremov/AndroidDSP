@@ -21,15 +21,18 @@ public class MainPresenter implements MainPresenterInterface {
 
   @Override
   public void minusButtonClicked() {
-    int count = controlView.updateVertCount(false);
-    graphView.hideEdges();
-    graphView.updateVertices(count);
+    updateGraph(false);
   }
 
   @Override
   public void plusButtonClicked() {
-    int count = controlView.updateVertCount(true);
+    updateGraph(true);
+  }
+
+  private void updateGraph(boolean increment) {
+    int count = controlView.updateVertCount(increment);
     graphView.hideEdges();
     graphView.updateVertices(count);
+    graphView.updateEdges();
   }
 }

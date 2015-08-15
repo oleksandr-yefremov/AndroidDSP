@@ -38,7 +38,7 @@ public class GraphView extends Fragment implements GraphViewInterface {
 
   private void createVertices(int number) {
     containerLayout.removeAllViewsInLayout();
-    for (int i = 1; i < number + 1; ++i) {
+    for (int i = 0; i < number; ++i) {
       createVertex(String.valueOf(i), containerLayout);
     }
   }
