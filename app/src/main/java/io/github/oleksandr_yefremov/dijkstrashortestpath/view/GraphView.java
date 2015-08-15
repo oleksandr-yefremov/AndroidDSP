@@ -29,23 +29,32 @@ public class GraphView extends Fragment implements GraphViewInterface {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    View inflatedView = inflater.inflate(R.layout.fragment_graph, container, false);
-    CircularImageView vertButton = (CircularImageView) inflatedView.findViewById(R.id.vertButton);
+    ViewGroup containerLayout = (ViewGroup) inflater.inflate(R.layout.fragment_graph, container, false);
+
+    createVertex("1", containerLayout);
+    createVertex("2", containerLayout);
+    createVertex("3", containerLayout);
+    createVertex("4", containerLayout);
+    return containerLayout;
+  }
+
+  private void createVertex(String number, ViewGroup containerLayout) {
+//    CircularImageView vertButton = (CircularImageView) containerLayout.findViewById(R.id.vertButton);
+
+    CircularImageView vertButton = (CircularImageView) getLayoutInflater(null).inflate(R.layout.view_vertex, containerLayout, false);
 
     TextDrawable textAvatarDrawable = TextDrawable
       .builder()
       .beginConfig()
-      .width(110)
-      .height(110)
+      .width(40)
+      .height(40)
       .textColor(Color.BLACK)
-//      .fontSize(40)
-//      .toUpperCase()
 //      .bold()
       .endConfig()
-      .buildRect("1", Color.WHITE);
+      .buildRect(number, Color.WHITE);
 
     vertButton.setImageDrawable(textAvatarDrawable);
-    return inflatedView;
+    containerLayout.addView(vertButton);
   }
 
   @Override

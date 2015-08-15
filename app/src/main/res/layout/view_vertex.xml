@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.github.oleksandr_yefremov.dijkstrashortestpath.view.drawable.CircularImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vertButton"
+    app:civ_border="true"
+    app:civ_borderColor="@color/white"
+    app:civ_borderWidth="1dp"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    />
