@@ -1,0 +1,22 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/controlViewFragment"
+        android:name="io.github.oleksandr_yefremov.dijkstrashortestpath.view.ControlView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/fragment_control"/>
+
+    <fragment
+        android:id="@+id/graphViewFragment"
+        android:name="io.github.oleksandr_yefremov.dijkstrashortestpath.view.GraphView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/fragment_control"/>
+</LinearLayout>
