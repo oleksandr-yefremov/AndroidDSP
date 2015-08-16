@@ -41,8 +41,8 @@ public class MainPresenter implements MainPresenterInterface {
 
   private void updateGraph(boolean increment) {
     int count = controlView.updateVertCount(increment);
+    graphInteractor.updateGraph(count);
     graphView.updateGraph(graphInteractor.getGraph());
-//    graphView.updateVertices(count);
     graphView.updateEdges();
   }
 

@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class Graph {
-  private final Map<Integer, Vertex> graph; // mapping of vertex names to Vertex objects, built from a set of Edges
+  private final TreeMap<Integer, Vertex> graph; // mapping of vertex names to Vertex objects, built from a set of Edges
 
   /**
    * One edge of the graph (only used by Graph constructor)
@@ -66,11 +68,27 @@ public class Graph {
     }
   }
 
+  public Graph(int numOfVertices) {
+    this(generateEdges(numOfVertices));
+  }
+
+  private static Edge[] generateEdges(int numOfVertices) {
+    Edge[] edges = new Edge[numOfVertices];
+    Edge edge;
+    for (int i = 0; i < numOfVertices; ++i) {
+      edge = new Edge(i,
+                      new Random().nextInt(numOfVertices),
+                      new Random().nextInt(30));
+      edges[i] = edge;
+    }
+    return edges;
+  }
+
   /**
    * Builds a graph from a set of edges
    */
   public Graph(Edge[] edges) {
-    graph = new HashMap<>(edges.length);
+    graph = new TreeMap<>();
 
     //one pass to find all vertices
     for (Edge e : edges) {
