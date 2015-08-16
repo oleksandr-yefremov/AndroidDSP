@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import io.github.oleksandr_yefremov.dijkstrashortestpath.R;
+import io.github.oleksandr_yefremov.dijkstrashortestpath.interactor.GraphInteractor;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.presenter.MainPresenter;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.ControlView;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.GraphView;
@@ -20,8 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
     GraphView graphViewFragment = (GraphView) getSupportFragmentManager().findFragmentById(R.id.graphViewFragment);
     ControlView controlViewFragment = (ControlView) getSupportFragmentManager().findFragmentById(R.id.controlViewFragment);
+    GraphInteractor graphInteractor = new GraphInteractor();
 
-    MainPresenter presenter = new MainPresenter(graphViewFragment, controlViewFragment);
+    MainPresenter presenter = new MainPresenter(graphViewFragment, controlViewFragment, graphInteractor);
     controlViewFragment.setPresenter(presenter);
     graphViewFragment.setPresenter(presenter);
   }

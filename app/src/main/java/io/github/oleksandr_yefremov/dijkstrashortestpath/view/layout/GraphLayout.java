@@ -10,14 +10,15 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Build.VERSION_CODES;
-import android.support.v4.util.Pair;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.HashMap;
-import java.util.Map;
+
+import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph;
+import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph.Vertex;
 
 /**
  * Created by Oleksandr Yefremov.
@@ -27,7 +28,8 @@ public class GraphLayout extends FrameLayout {
   /**
    * Map[Pair[Vertex1, Vertex2], Weight]
    */
-  private static final Map<Pair<Integer, Integer>, Float> GRAPH = new HashMap<>();
+//  private static final Map<Pair<Integer, Integer>, Float> GRAPH = new HashMap<>();
+  private Graph graph;
   private static final float Y_OFFSET = -5f;
 
   private HashMap<Integer, VertexPos> verticesPositionMap = new HashMap<>();
@@ -55,19 +57,6 @@ public class GraphLayout extends FrameLayout {
   }
 
   private void initPaint() {
-    // sample graph.
-    // TODO: move into file or separate class
-    GRAPH.put(new Pair<>(0, 1), 10f);
-    GRAPH.put(new Pair<>(7, 3), 40f);
-    GRAPH.put(new Pair<>(3, 0), 100f);
-    GRAPH.put(new Pair<>(3, 2), 20f);
-    GRAPH.put(new Pair<>(5, 8), 20f);
-    GRAPH.put(new Pair<>(9, 0), 30f);
-    GRAPH.put(new Pair<>(4, 6), 50f);
-    GRAPH.put(new Pair<>(3, 8), 80f);
-    GRAPH.put(new Pair<>(9, 4), 10f);
-    GRAPH.put(new Pair<>(6, 1), 10f);
-
     linePaint = new Paint();
     linePaint.setColor(Color.BLACK);
     linePaint.setAntiAlias(true);
@@ -78,8 +67,15 @@ public class GraphLayout extends FrameLayout {
     weightPaint.setTextSize(24);
   }
 
+  public void setGraph(Graph graph) {
+    this.graph = graph;
+  }
+
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    if (getChildCount() == 0) {
+      return;
+    }
     verticesPositionMap.clear();
     final int paddingLeft = getPaddingLeft();
     final int paddingTop = getPaddingTop();
@@ -134,10 +130,17 @@ public class GraphLayout extends FrameLayout {
     // draw vertices
     super.onDraw(canvas);
 
+    if (graph == null) {
+      return;
+    }
+
     // draw edges and weights
-    for (Pair<Integer, Integer> pair : GRAPH.keySet()) {
-      float weight = GRAPH.get(pair);
-      drawEdge(canvas, pair.first, pair.second, weight);
+    for (Vertex vertex : graph.getAllVertices()) {
+//      float weight = vertex.weight;
+      for (Vertex neighbour : vertex.neighbours.keySet()) {
+        int weight = vertex.neighbours.get(neighbour);
+        drawEdge(canvas, vertex.index, neighbour.index, weight);
+      }
     }
   }
 
@@ -181,7 +184,7 @@ public class GraphLayout extends FrameLayout {
       : bounds.height() / 3;
 
     // draw weight
-    canvas.drawTextOnPath(String.valueOf((int)weight), path, weightPos, Y_OFFSET, weightPaint);
+    canvas.drawTextOnPath(String.valueOf((int) weight), path, weightPos, Y_OFFSET, weightPaint);
   }
 
   @Override

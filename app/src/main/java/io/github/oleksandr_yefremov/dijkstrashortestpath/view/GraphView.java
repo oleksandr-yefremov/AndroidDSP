@@ -13,18 +13,20 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import java.util.List;
 
 import io.github.oleksandr_yefremov.dijkstrashortestpath.R;
+import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph;
+import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph.Vertex;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.presenter.PresenterInterface.MainPresenterInterface;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.ViewInterface.GraphViewInterface;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.drawable.VertexImageButton;
+import io.github.oleksandr_yefremov.dijkstrashortestpath.view.layout.GraphLayout;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class GraphView extends Fragment implements GraphViewInterface {
 
-  private View[] vertices;
   private MainPresenterInterface presenter;
-  private ViewGroup containerLayout;
+  private GraphLayout graphLayout;
 
   public void setPresenter(MainPresenterInterface presenter) {
     this.presenter = presenter;
@@ -33,20 +35,19 @@ public class GraphView extends Fragment implements GraphViewInterface {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    containerLayout = (ViewGroup) inflater.inflate(R.layout.fragment_graph, container, false);
+    graphLayout = (GraphLayout) inflater.inflate(R.layout.fragment_graph, container, false);
 
-    createVertices(4);
-    return containerLayout;
+    return graphLayout;
   }
 
-  private void createVertices(int number) {
-    containerLayout.removeAllViewsInLayout();
-    for (int i = 0; i < number; ++i) {
-      createVertex(i, containerLayout);
-    }
-  }
+//  private void createVertices(int number) {
+//    graphLayout.removeAllViewsInLayout();
+//    for (int i = 0; i < number; ++i) {
+//      createVertex(i, graphLayout);
+//    }
+//  }
 
-  private void createVertex(int number, ViewGroup containerLayout) {
+  private void createVertex(Vertex vertex, ViewGroup containerLayout) {
     final VertexImageButton vertButton = (VertexImageButton) getLayoutInflater(null)
       .inflate(R.layout.view_vertex, containerLayout, false);
 
@@ -59,10 +60,10 @@ public class GraphView extends Fragment implements GraphViewInterface {
       .textColor(Color.BLACK)
 //      .bold()
       .endConfig()
-      .buildRect(String.valueOf(number), Color.TRANSPARENT);
+      .buildRect(String.valueOf(vertex.index), Color.TRANSPARENT);
 
     vertButton.setImageDrawable(textAvatarDrawable);
-    vertButton.setIndex(number);
+    vertButton.setIndex(vertex.index);
     vertButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -78,21 +79,35 @@ public class GraphView extends Fragment implements GraphViewInterface {
   }
 
   @Override
-  public void updateVertices(int count) {
-    createVertices(count);
+  public void updateGraph(Graph graph) {
+    createVertices(graph);
+    graphLayout.setGraph(graph);
   }
+
+  private void createVertices(Graph graph) {
+    graphLayout.removeAllViewsInLayout();
+    List<Vertex> vertices = graph.getAllVertices();
+    for (int i = 0; i < vertices.size(); ++i) {
+      createVertex(vertices.get(i), graphLayout);
+    }
+  }
+
+//  @Override
+//  public void updateVertices(int count) {
+//    createVertices(count);
+//  }
 
   @Override
   public void updateSelectedVertices(List<Integer> selectedVertices) {
     View child;
     // deselect all views
-    for (int i = 0; i < containerLayout.getChildCount(); ++i) {
-      child = containerLayout.getChildAt(i);
+    for (int i = 0; i < graphLayout.getChildCount(); ++i) {
+      child = graphLayout.getChildAt(i);
       child.setSelected(false);
     }
     // update selection
     for (int selectedIndex : selectedVertices) {
-      child = containerLayout.getChildAt(selectedIndex);
+      child = graphLayout.getChildAt(selectedIndex);
       child.setSelected(true);
     }
   }
