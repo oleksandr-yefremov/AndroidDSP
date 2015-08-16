@@ -52,6 +52,7 @@ public class MainPresenter implements MainPresenterInterface {
     if (selectedVerticesList.contains(index)) {
       selectedVerticesList.remove((Integer) index);
       graphView.updateSelectedVertices(selectedVerticesList);
+      graphView.hidePath();
       return;
     }
     if (selectedVerticesList.size() == 2) {
@@ -61,7 +62,7 @@ public class MainPresenter implements MainPresenterInterface {
     selectedVerticesList.add(index);
     graphView.updateSelectedVertices(selectedVerticesList);
     if (selectedVerticesList.size() == 2) {
-      graphInteractor.calculateShortestPath(selectedVerticesList.get(0), selectedVerticesList.get(1));
+      graphView.showPath(graphInteractor.calculateShortestPath(selectedVerticesList.get(0), selectedVerticesList.get(1)));
     }
   }
 

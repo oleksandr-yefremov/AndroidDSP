@@ -10,12 +10,15 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Build.VERSION_CODES;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph.Vertex;
@@ -33,7 +36,8 @@ public class GraphLayout extends FrameLayout {
   private static final float Y_OFFSET = -5f;
 
   private HashMap<Integer, VertexPos> verticesPositionMap = new HashMap<>();
-  private Paint linePaint, weightPaint;
+  private Paint linePaint, highlightedLinePaint, weightPaint;
+  private List<Integer> highlightedEdges = new ArrayList<>();
 
   public GraphLayout(Context context) {
     this(context, null);
@@ -61,6 +65,11 @@ public class GraphLayout extends FrameLayout {
     linePaint.setColor(Color.BLACK);
     linePaint.setAntiAlias(true);
     linePaint.setStyle(Style.STROKE);
+
+    highlightedLinePaint = new Paint(linePaint);
+    highlightedLinePaint.setColor(Color.RED);
+    highlightedLinePaint.setStrokeWidth(3);
+    highlightedLinePaint.setTextSize(30);
 
     weightPaint = new Paint(linePaint);
     weightPaint.setColor(Color.BLUE);
@@ -139,12 +148,25 @@ public class GraphLayout extends FrameLayout {
 //      float weight = vertex.weight;
       for (Vertex neighbour : vertex.neighbours.keySet()) {
         int weight = vertex.neighbours.get(neighbour);
-        drawEdge(canvas, vertex.index, neighbour.index, weight);
+
+        boolean isHighlighted = false;
+
+        // highlight shortest path between two vertices
+        if (highlightedEdges != null) {
+          int indexOfVertex1InPath = highlightedEdges.indexOf(vertex.index);
+          int indexOfVertex2InPath = highlightedEdges.indexOf(neighbour.index);
+          if (indexOfVertex1InPath > -1
+              && (indexOfVertex2InPath - indexOfVertex1InPath == 1
+                  || indexOfVertex1InPath - indexOfVertex2InPath == 1)) {
+            isHighlighted = true;
+          }
+        }
+        drawEdge(canvas, vertex.index, neighbour.index, weight, isHighlighted);
       }
     }
   }
 
-  private void drawEdge(Canvas canvas, int v1Index, int v2Index, float weight) {
+  private void drawEdge(Canvas canvas, int v1Index, int v2Index, float weight, boolean isHighlighted) {
     VertexPos vertex1Pos = verticesPositionMap.get(v1Index);
     VertexPos vertex2Pos = verticesPositionMap.get(v2Index);
 
@@ -175,7 +197,7 @@ public class GraphLayout extends FrameLayout {
     path.lineTo(v2.x, v2.y);
 
     // draw edge
-    canvas.drawPath(path, linePaint);
+    canvas.drawPath(path, isHighlighted ? highlightedLinePaint : linePaint);
 
     RectF bounds = new RectF();
     path.computeBounds(bounds, false);
@@ -190,6 +212,11 @@ public class GraphLayout extends FrameLayout {
   @Override
   public boolean onInterceptTouchEvent(MotionEvent event) {
     return false;
+  }
+
+  public void showPath(@Nullable List<Integer> vertices) {
+    this.highlightedEdges = vertices;
+    invalidate();
   }
 
   /**

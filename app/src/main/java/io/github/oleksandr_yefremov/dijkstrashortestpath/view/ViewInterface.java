@@ -15,6 +15,10 @@ public class ViewInterface {
 //    void updateVertices(int count);
 
     void updateSelectedVertices(List<Integer> selectedVertices);
+
+    void showPath(List<Integer> vertices);
+
+    void hidePath();
   }
 
   public interface ControlViewInterface {

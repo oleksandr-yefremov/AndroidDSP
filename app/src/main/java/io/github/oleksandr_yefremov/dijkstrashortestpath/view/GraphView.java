@@ -112,4 +112,14 @@ public class GraphView extends Fragment implements GraphViewInterface {
     }
   }
 
+  @Override
+  public void showPath(List<Integer> vertices) {
+    graphLayout.showPath(vertices);
+  }
+
+  @Override
+  public void hidePath() {
+    graphLayout.showPath(null);
+  }
+
 }
