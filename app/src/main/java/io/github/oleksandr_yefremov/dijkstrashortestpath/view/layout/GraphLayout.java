@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.os.Build.VERSION_CODES;
 import android.support.v4.util.Pair;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -181,6 +182,13 @@ public class GraphLayout extends FrameLayout {
 
     // draw weight
     canvas.drawTextOnPath(String.valueOf(weight), path, weightPos, Y_OFFSET, weightPaint);
+  }
+
+
+  @Override
+  public boolean onInterceptTouchEvent(MotionEvent event) {
+
+    return false;
   }
 
   /**
