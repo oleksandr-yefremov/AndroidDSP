@@ -499,7 +499,17 @@ public class CircularImageView extends ImageView {
    * @return Whether or not this view is currently
    * in its selected state.
    */
+  @Override
   public boolean isSelected() {
     return this.isSelected;
+  }
+
+  /**
+   * Set selected state for this view.
+   */
+  @Override
+  public void setSelected(boolean isSelected) {
+    this.isSelected = isSelected;
+    invalidate();
   }
 }

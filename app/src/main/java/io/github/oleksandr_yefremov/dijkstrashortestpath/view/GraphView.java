@@ -3,7 +3,6 @@ package io.github.oleksandr_yefremov.dijkstrashortestpath.view;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,8 +10,10 @@ import android.view.ViewGroup;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 
+import java.util.List;
+
 import io.github.oleksandr_yefremov.dijkstrashortestpath.R;
-import io.github.oleksandr_yefremov.dijkstrashortestpath.presenter.MainPresenter;
+import io.github.oleksandr_yefremov.dijkstrashortestpath.presenter.PresenterInterface.MainPresenterInterface;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.ViewInterface.GraphViewInterface;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.drawable.VertexImageButton;
 
@@ -22,10 +23,10 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.view.drawable.VertexIma
 public class GraphView extends Fragment implements GraphViewInterface {
 
   private View[] vertices;
-  private MainPresenter presenter;
+  private MainPresenterInterface presenter;
   private ViewGroup containerLayout;
 
-  public void setPresenter(MainPresenter presenter) {
+  public void setPresenter(MainPresenterInterface presenter) {
     this.presenter = presenter;
   }
 
@@ -65,15 +66,10 @@ public class GraphView extends Fragment implements GraphViewInterface {
     vertButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        Log.d("GRAPH", "vertButton.getIndex : " + vertButton.getIndex());
+        presenter.vertexClicked(vertButton.getIndex());
       }
     });
     containerLayout.addView(vertButton);
-  }
-
-  @Override
-  public void hideEdges() {
-
   }
 
   @Override
@@ -84,6 +80,21 @@ public class GraphView extends Fragment implements GraphViewInterface {
   @Override
   public void updateVertices(int count) {
     createVertices(count);
+  }
+
+  @Override
+  public void updateSelectedVertices(List<Integer> selectedVertices) {
+    View child;
+    // deselect all views
+    for (int i = 0; i < containerLayout.getChildCount(); ++i) {
+      child = containerLayout.getChildAt(i);
+      child.setSelected(false);
+    }
+    // update selection
+    for (int selectedIndex : selectedVertices) {
+      child = containerLayout.getChildAt(selectedIndex);
+      child.setSelected(true);
+    }
   }
 
 }

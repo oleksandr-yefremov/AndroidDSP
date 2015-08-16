@@ -6,7 +6,7 @@ package io.github.oleksandr_yefremov.dijkstrashortestpath.presenter;
 public class PresenterInterface {
   public interface MainPresenterInterface {
     void minusButtonClicked();
-
     void plusButtonClicked();
+    void vertexClicked(int index);
   }
 }

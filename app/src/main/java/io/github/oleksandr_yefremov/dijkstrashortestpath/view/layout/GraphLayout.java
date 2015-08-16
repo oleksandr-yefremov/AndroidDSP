@@ -27,7 +27,7 @@ public class GraphLayout extends FrameLayout {
   /**
    * Map[Pair[Vertex1, Vertex2], Weight]
    */
-  private static final Map<Pair<Integer, Integer>, Integer> GRAPH = new HashMap<>();
+  private static final Map<Pair<Integer, Integer>, Float> GRAPH = new HashMap<>();
   private static final float Y_OFFSET = -5f;
 
   private HashMap<Integer, VertexPos> verticesPositionMap = new HashMap<>();
@@ -57,16 +57,16 @@ public class GraphLayout extends FrameLayout {
   private void initPaint() {
     // sample graph.
     // TODO: move into file or separate class
-    GRAPH.put(new Pair<>(0, 1), 10);
-    GRAPH.put(new Pair<>(7, 3), 40);
-    GRAPH.put(new Pair<>(3, 0), 100);
-    GRAPH.put(new Pair<>(3, 2), 20);
-    GRAPH.put(new Pair<>(5, 8), 20);
-    GRAPH.put(new Pair<>(9, 0), 30);
-    GRAPH.put(new Pair<>(4, 6), 50);
-    GRAPH.put(new Pair<>(3, 8), 80);
-    GRAPH.put(new Pair<>(9, 4), 10);
-    GRAPH.put(new Pair<>(6, 1), 10);
+    GRAPH.put(new Pair<>(0, 1), 10f);
+    GRAPH.put(new Pair<>(7, 3), 40f);
+    GRAPH.put(new Pair<>(3, 0), 100f);
+    GRAPH.put(new Pair<>(3, 2), 20f);
+    GRAPH.put(new Pair<>(5, 8), 20f);
+    GRAPH.put(new Pair<>(9, 0), 30f);
+    GRAPH.put(new Pair<>(4, 6), 50f);
+    GRAPH.put(new Pair<>(3, 8), 80f);
+    GRAPH.put(new Pair<>(9, 4), 10f);
+    GRAPH.put(new Pair<>(6, 1), 10f);
 
     linePaint = new Paint();
     linePaint.setColor(Color.BLACK);
@@ -136,12 +136,12 @@ public class GraphLayout extends FrameLayout {
 
     // draw edges and weights
     for (Pair<Integer, Integer> pair : GRAPH.keySet()) {
-      int weight = GRAPH.get(pair);
+      float weight = GRAPH.get(pair);
       drawEdge(canvas, pair.first, pair.second, weight);
     }
   }
 
-  private void drawEdge(Canvas canvas, int v1Index, int v2Index, int weight) {
+  private void drawEdge(Canvas canvas, int v1Index, int v2Index, float weight) {
     VertexPos vertex1Pos = verticesPositionMap.get(v1Index);
     VertexPos vertex2Pos = verticesPositionMap.get(v2Index);
 
@@ -181,13 +181,11 @@ public class GraphLayout extends FrameLayout {
       : bounds.height() / 3;
 
     // draw weight
-    canvas.drawTextOnPath(String.valueOf(weight), path, weightPos, Y_OFFSET, weightPaint);
+    canvas.drawTextOnPath(String.valueOf((int)weight), path, weightPos, Y_OFFSET, weightPaint);
   }
-
 
   @Override
   public boolean onInterceptTouchEvent(MotionEvent event) {
-
     return false;
   }
 

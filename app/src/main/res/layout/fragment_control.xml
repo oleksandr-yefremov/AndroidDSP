@@ -13,7 +13,7 @@
         <Button
             android:id="@+id/minusButton"
             style="@style/Default.Button.Borderless"
-            android:text="-"/>
+            android:text="–"/>
 
         <TextView
             android:id="@+id/vertCounter"

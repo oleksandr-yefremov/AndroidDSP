@@ -1,18 +1,20 @@
-package io.github.oleksandr_yefremov.dijkstrashortestpath.view;
-
 /**
  * Created by Oleksandr Yefremov.
  */
+package io.github.oleksandr_yefremov.dijkstrashortestpath.view;
+
+import java.util.List;
+
 public class ViewInterface {
   public interface GraphViewInterface {
-    public void hideEdges();
+    void updateEdges();
 
-    public void updateEdges();
+    void updateVertices(int count);
 
-    public void updateVertices(int count);
+    void updateSelectedVertices(List<Integer> selectedVertices);
   }
 
   public interface ControlViewInterface {
-    public int updateVertCount(boolean incr);
+    int updateVertCount(boolean incr);
   }
 }
