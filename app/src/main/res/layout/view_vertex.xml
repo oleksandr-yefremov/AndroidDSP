@@ -5,7 +5,11 @@
     android:layout_width="@dimen/Default.Vertex.Size"
     android:layout_height="@dimen/Default.Vertex.Size"
     android:layout_gravity="center"
+    android:clickable="true"
+    app:civ_selector="true"
+    app:civ_selectorStrokeColor="@android:color/holo_red_light"
+    app:civ_selectorStrokeWidth="5dp"
     app:civ_border="true"
-    app:civ_borderColor="@color/white"
-    app:civ_borderWidth="0dp"
     />
+    <!--app:civ_borderColor="@android:color/holo_blue_light"-->
+    <!--app:civ_borderWidth="0dp"-->

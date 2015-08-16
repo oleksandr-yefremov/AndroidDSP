@@ -26,7 +26,9 @@ public class GraphLayout extends FrameLayout {
   /**
    * Map[Pair[Vertex1, Vertex2], Weight]
    */
-  private static Map<Pair<Integer, Integer>, Integer> GRAPH = new HashMap<>();
+  private static final Map<Pair<Integer, Integer>, Integer> GRAPH = new HashMap<>();
+  private static final float Y_OFFSET = -5f;
+
   private HashMap<Integer, VertexPos> verticesPositionMap = new HashMap<>();
   private Paint linePaint, weightPaint;
 
@@ -131,7 +133,7 @@ public class GraphLayout extends FrameLayout {
     // draw vertices
     super.onDraw(canvas);
 
-    // draw edges
+    // draw edges and weights
     for (Pair<Integer, Integer> pair : GRAPH.keySet()) {
       int weight = GRAPH.get(pair);
       drawEdge(canvas, pair.first, pair.second, weight);
@@ -147,6 +149,8 @@ public class GraphLayout extends FrameLayout {
       return;
     }
 
+    // TODO: reuse Path, Point and RectF objects,
+    // i.e. do not allocate them in onDraw()
     Path path = new Path();
     PointF v1, v2;
 
@@ -174,8 +178,9 @@ public class GraphLayout extends FrameLayout {
     float weightPos = bounds.width() > bounds.height()
       ? bounds.width() / 2
       : bounds.height() / 3;
+
     // draw weight
-    canvas.drawTextOnPath(String.valueOf(weight), path, weightPos, -5f, weightPaint);
+    canvas.drawTextOnPath(String.valueOf(weight), path, weightPos, Y_OFFSET, weightPaint);
   }
 
   /**
@@ -183,9 +188,6 @@ public class GraphLayout extends FrameLayout {
    */
   private static class VertexPos {
     public int l, t, r, b;
-
-    public VertexPos() {
-    }
 
     public VertexPos(int l, int t, int r, int b) {
       this.l = l;

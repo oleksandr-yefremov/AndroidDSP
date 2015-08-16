@@ -33,14 +33,17 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -55,6 +58,7 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.R;
 public class CircularImageView extends ImageView {
   // For logging purposes
   private static final String TAG = CircularImageView.class.getSimpleName();
+  private Rect rect;
 
   // Default property values
   private static final boolean SHADOW_ENABLED = false;
@@ -85,6 +89,7 @@ public class CircularImageView extends ImageView {
   private Paint paintBorder;
   private Paint paintSelectorBorder;
   private ColorFilter selectorFilter;
+  private boolean touchHandled;
 
   public CircularImageView(Context context) {
     this(context, null, R.styleable.CircularImageViewStyle_circularImageViewDefault);
@@ -118,7 +123,7 @@ public class CircularImageView extends ImageView {
     paint.setAntiAlias(true);
     paintBorder = new Paint();
     paintBorder.setAntiAlias(true);
-    paintBorder.setStyle(Paint.Style.STROKE);
+    paintBorder.setStyle(Style.FILL_AND_STROKE);
     paintSelectorBorder = new Paint();
     paintSelectorBorder.setAntiAlias(true);
 
@@ -305,24 +310,29 @@ public class CircularImageView extends ImageView {
   }
 
   @Override
-  public boolean dispatchTouchEvent(MotionEvent event) {
+  public boolean dispatchTouchEvent(@NonNull MotionEvent event) {
     // Check for clickable state and do nothing if disabled
     if (!this.isClickable()) {
-      this.isSelected = false;
+      isSelected = false;
       return super.onTouchEvent(event);
     }
 
     // Set selected state based on Motion Event
     switch (event.getAction()) {
       case MotionEvent.ACTION_DOWN:
-        this.isSelected = true;
+        isSelected = !isSelected;
+        rect = new Rect(getLeft(), getTop(), getRight(), getBottom());
+        break;
+      case MotionEvent.ACTION_MOVE:
+        if (!rect.contains(getLeft() + (int) event.getX(), getTop() + (int) event.getY())
+            && !touchHandled) {
+          isSelected = !isSelected;
+          touchHandled = true;
+        }
         break;
       case MotionEvent.ACTION_UP:
-      case MotionEvent.ACTION_SCROLL:
-      case MotionEvent.ACTION_OUTSIDE:
-      case MotionEvent.ACTION_CANCEL:
-        this.isSelected = false;
-        break;
+        touchHandled = false;
+//      case MotionEvent.ACTION_CANCEL:
     }
 
     // Redraw image and return super type

@@ -56,7 +56,7 @@ public class GraphView extends Fragment implements GraphViewInterface {
       .textColor(Color.BLACK)
 //      .bold()
       .endConfig()
-      .buildRect(number, Color.WHITE);
+      .buildRect(number, Color.TRANSPARENT);
 
     vertButton.setImageDrawable(textAvatarDrawable);
     containerLayout.addView(vertButton);
