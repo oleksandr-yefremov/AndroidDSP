@@ -5,55 +5,79 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.Path;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Build.VERSION_CODES;
 import android.support.v4.util.Pair;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Oleksandr Yefremov.
  */
 public class GraphLayout extends FrameLayout {
 
-  private static ArrayList<Pair<Integer, Integer>> VE = new ArrayList<>();
-  private HashMap<Integer, VertexPos> vPos = new HashMap<>();
-  private static Paint linePaint = new Paint();
-
-  static {
-    VE.add(new Pair<>(0, 1));
-    VE.add(new Pair<>(1, 2));
-    VE.add(new Pair<>(3, 0));
-
-    linePaint.setColor(Color.BLACK);
-  }
+  /**
+   * Map[Pair[Vertex1, Vertex2], Weight]
+   */
+  private static Map<Pair<Integer, Integer>, Integer> GRAPH = new HashMap<>();
+  private HashMap<Integer, VertexPos> verticesPositionMap = new HashMap<>();
+  private Paint linePaint, weightPaint;
 
   public GraphLayout(Context context) {
-    super(context);
-    setWillNotDraw(false);
+    this(context, null);
   }
 
   public GraphLayout(Context context, AttributeSet attrs) {
-    super(context, attrs);
-    setWillNotDraw(false);
+    this(context, attrs, 0);
   }
 
   public GraphLayout(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     setWillNotDraw(false);
+    initPaint();
   }
 
   @TargetApi(VERSION_CODES.LOLLIPOP)
   public GraphLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
     setWillNotDraw(false);
+    initPaint();
+  }
+
+  private void initPaint() {
+    // sample graph.
+    // TODO: move into file or separate class
+    GRAPH.put(new Pair<>(0, 1), 10);
+    GRAPH.put(new Pair<>(7, 3), 40);
+    GRAPH.put(new Pair<>(3, 0), 100);
+    GRAPH.put(new Pair<>(3, 2), 20);
+    GRAPH.put(new Pair<>(5, 8), 20);
+    GRAPH.put(new Pair<>(9, 0), 30);
+    GRAPH.put(new Pair<>(4, 6), 50);
+    GRAPH.put(new Pair<>(3, 8), 80);
+    GRAPH.put(new Pair<>(9, 4), 10);
+    GRAPH.put(new Pair<>(6, 1), 10);
+
+    linePaint = new Paint();
+    linePaint.setColor(Color.BLACK);
+    linePaint.setAntiAlias(true);
+    linePaint.setStyle(Style.STROKE);
+
+    weightPaint = new Paint(linePaint);
+    weightPaint.setColor(Color.BLUE);
+    weightPaint.setTextSize(24);
   }
 
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    verticesPositionMap.clear();
     final int paddingLeft = getPaddingLeft();
     final int paddingTop = getPaddingTop();
 
@@ -63,24 +87,27 @@ public class GraphLayout extends FrameLayout {
 
     int radius = centerX - paddingLeft - getChildAt(0).getMeasuredWidth() / 2;
 
-    float fraction = (float) (2 * Math.PI / childCount);
-    float angle = 0;
+    float sweepAngle = (float) (2 * Math.PI / childCount);
+    float currentAngle = 0;
+    // start at 0º
     int x0 = centerX;
     int y0 = centerY - radius;
+    // radius
     int rx = x0 - centerX;
     int ry = y0 - centerY;
+
+    View child;
     for (int i = 0; i < childCount; ++i) {
-      // start at 0º
-      double cos = Math.cos(angle);
-      double sin = Math.sin(angle);
+      double cos = Math.cos(currentAngle);
+      double sin = Math.sin(currentAngle);
       int x1 = (int) (centerX + rx * cos - ry * sin);
       int y1 = (int) (centerY + rx * sin + ry * cos);
 
-      View child = getChildAt(i);
+      child = getChildAt(i);
       layoutView(i, child, x1 - child.getMeasuredWidth() / 2, y1 - child.getMeasuredHeight() / 2,
                  child.getMeasuredWidth(),
                  child.getMeasuredHeight());
-      angle += fraction;
+      currentAngle += sweepAngle;
     }
   }
 
@@ -95,7 +122,8 @@ public class GraphLayout extends FrameLayout {
     int b = topWithMargins + height;
     view.layout(l, t, r, b);
 
-    vPos.put(vertIndex, new VertexPos(l, t, r, b));
+    // save vertex position
+    verticesPositionMap.put(vertIndex, new VertexPos(l, t, r, b));
   }
 
   @Override
@@ -104,29 +132,60 @@ public class GraphLayout extends FrameLayout {
     super.onDraw(canvas);
 
     // draw edges
-    for (Pair<Integer, Integer> pair : VE) {
-      drawEdge(canvas, pair.first, pair.second);
+    for (Pair<Integer, Integer> pair : GRAPH.keySet()) {
+      int weight = GRAPH.get(pair);
+      drawEdge(canvas, pair.first, pair.second, weight);
     }
   }
 
-  private void drawEdge(Canvas canvas, int v1Index, int v2Index) {
-    VertexPos vertex1Pos = vPos.get(v1Index);
-    VertexPos vertex2Pos = vPos.get(v2Index);
+  private void drawEdge(Canvas canvas, int v1Index, int v2Index, int weight) {
+    VertexPos vertex1Pos = verticesPositionMap.get(v1Index);
+    VertexPos vertex2Pos = verticesPositionMap.get(v2Index);
 
     if (vertex1Pos == null || vertex2Pos == null) {
 //      throw new IllegalArgumentException();
       return;
     }
 
-    canvas.drawLine(vertex1Pos.r - (vertex1Pos.r - vertex1Pos.l)/2,
-                    vertex1Pos.b - (vertex1Pos.b - vertex1Pos.t)/2,
-                    vertex2Pos.r - (vertex2Pos.r - vertex2Pos.l)/2,
-                    vertex2Pos.b - (vertex2Pos.b - vertex2Pos.t)/2,
-                    linePaint);
+    Path path = new Path();
+    PointF v1, v2;
+
+    if (vertex1Pos.r < vertex2Pos.r) {
+      // draw left to right
+      v1 = new PointF(vertex1Pos.r - (vertex1Pos.r - vertex1Pos.l) / 2,
+                      vertex1Pos.b - (vertex1Pos.b - vertex1Pos.t) / 2);
+      v2 = new PointF(vertex2Pos.r - (vertex2Pos.r - vertex2Pos.l) / 2,
+                      vertex2Pos.b - (vertex2Pos.b - vertex2Pos.t) / 2);
+    } else {
+      // draw right to left
+      v2 = new PointF(vertex1Pos.r - (vertex1Pos.r - vertex1Pos.l) / 2,
+                      vertex1Pos.b - (vertex1Pos.b - vertex1Pos.t) / 2);
+      v1 = new PointF(vertex2Pos.r - (vertex2Pos.r - vertex2Pos.l) / 2,
+                      vertex2Pos.b - (vertex2Pos.b - vertex2Pos.t) / 2);
+    }
+    path.moveTo(v1.x, v1.y);
+    path.lineTo(v2.x, v2.y);
+
+    // draw edge
+    canvas.drawPath(path, linePaint);
+
+    RectF bounds = new RectF();
+    path.computeBounds(bounds, false);
+    float weightPos = bounds.width() > bounds.height()
+      ? bounds.width() / 2
+      : bounds.height() / 3;
+    // draw weight
+    canvas.drawTextOnPath(String.valueOf(weight), path, weightPos, -5f, weightPaint);
   }
 
+  /**
+   * Absolute vertex position in parent container
+   */
   private static class VertexPos {
     public int l, t, r, b;
+
+    public VertexPos() {
+    }
 
     public VertexPos(int l, int t, int r, int b) {
       this.l = l;

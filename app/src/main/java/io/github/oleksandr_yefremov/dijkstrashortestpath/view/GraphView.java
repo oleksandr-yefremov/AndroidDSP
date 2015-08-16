@@ -47,11 +47,12 @@ public class GraphView extends Fragment implements GraphViewInterface {
     CircularImageView vertButton = (CircularImageView) getLayoutInflater(null)
       .inflate(R.layout.view_vertex, containerLayout, false);
 
+    int size = getResources().getDimensionPixelSize(R.dimen.Default_Vertex_Size);
     TextDrawable textAvatarDrawable = TextDrawable
       .builder()
       .beginConfig()
-      .width(40)
-      .height(40)
+      .width(size)
+      .height(size)
       .textColor(Color.BLACK)
 //      .bold()
       .endConfig()
