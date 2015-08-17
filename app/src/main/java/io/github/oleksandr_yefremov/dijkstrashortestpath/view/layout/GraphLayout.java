@@ -75,7 +75,7 @@ public class GraphLayout extends FrameLayout {
 
   public void updateGraph(Graph graph) {
     this.graph = graph;
-    highlightedEdges.clear();
+    highlightedEdges = null;
     invalidate();
   }
 

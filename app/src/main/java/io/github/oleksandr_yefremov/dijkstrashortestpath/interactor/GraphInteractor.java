@@ -23,9 +23,9 @@ public class GraphInteractor {
   }
 
   public List<Integer> calculateShortestPath(int v1Index, int v2Index) {
-    graph.dijkstra(v1Index);
-    graph.printPathString(v2Index);
-    return graph.printPath(v2Index);
+    graph.findShortestPaths(v1Index);
+//    graph.printPathString(v2Index);
+    return graph.getPath(v2Index);
   }
 
   public void updateGraph(int numOfVertices) {
