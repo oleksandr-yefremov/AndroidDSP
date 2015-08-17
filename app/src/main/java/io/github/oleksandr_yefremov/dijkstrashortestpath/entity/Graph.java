@@ -1,6 +1,7 @@
 package io.github.oleksandr_yefremov.dijkstrashortestpath.entity;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,16 +41,16 @@ public class Graph {
       this.index = index;
     }
 
-//    private void printPath() {
-//      if (this == this.previous) {
-//        System.out.printf("%s", this.index);
-//      } else if (this.previous == null) {
-//        System.out.printf("%s(unreached)", this.index);
-//      } else {
-//        this.previous.printPath();
-//        System.out.printf(" -> %s(%d)", this.index, this.weight);
-//      }
-//    }
+    private void printPath() {
+      if (this == this.previous) {
+        Log.d("GRAPH", " " + this.index);
+      } else if (this.previous == null) {
+        Log.d("GRAPH", "%" + this.index + "(unreached)");
+      } else {
+        this.previous.printPath();
+        Log.d("GRAPH", "-> %" + this.index + "(" + this.weight + ")");
+      }
+    }
 
     private void printPath(List<Integer> vertices) {
       if (this == this.previous) {
@@ -103,7 +104,7 @@ public class Graph {
     //another pass to set neighbouring vertices
     for (Edge e : edges) {
       graph.get(e.v1).neighbours.put(graph.get(e.v2), e.weight);
-//      graph.get(e.v2).neighbours.put(graph.get(e.v1), e.weight); // also do this for an undirected graph
+      graph.get(e.v2).neighbours.put(graph.get(e.v1), e.weight); // also do this for an undirected graph
     }
   }
 
@@ -221,6 +222,16 @@ public class Graph {
 
     ArrayList<Integer> vertices = new ArrayList<>();
     graph.get(endIndex).printPath(vertices);
+    return vertices;
+  }
+
+  public List<Integer> printPathString(int endIndex) {
+    if (!graph.containsKey(endIndex)) {
+      System.err.printf("Graph doesn't contain end vertex \"%s\"\n", endIndex);
+    }
+
+    ArrayList<Integer> vertices = new ArrayList<>();
+    graph.get(endIndex).printPath();
     return vertices;
   }
 

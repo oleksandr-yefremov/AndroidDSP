@@ -81,7 +81,7 @@ public class GraphView extends Fragment implements GraphViewInterface {
   @Override
   public void updateGraph(Graph graph) {
     createVertices(graph);
-    graphLayout.setGraph(graph);
+    graphLayout.updateGraph(graph);
   }
 
   private void createVertices(Graph graph) {

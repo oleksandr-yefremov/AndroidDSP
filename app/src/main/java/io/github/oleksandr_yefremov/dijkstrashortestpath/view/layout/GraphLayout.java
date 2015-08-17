@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.os.Build.VERSION_CODES;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -76,8 +77,10 @@ public class GraphLayout extends FrameLayout {
     weightPaint.setTextSize(24);
   }
 
-  public void setGraph(Graph graph) {
+  public void updateGraph(Graph graph) {
     this.graph = graph;
+    highlightedEdges.clear();
+    invalidate();
   }
 
   @Override
@@ -155,10 +158,14 @@ public class GraphLayout extends FrameLayout {
         if (highlightedEdges != null) {
           int indexOfVertex1InPath = highlightedEdges.indexOf(vertex.index);
           int indexOfVertex2InPath = highlightedEdges.indexOf(neighbour.index);
-          if (indexOfVertex1InPath > -1
-              && (indexOfVertex2InPath - indexOfVertex1InPath == 1
-                  || indexOfVertex1InPath - indexOfVertex2InPath == 1)) {
-            isHighlighted = true;
+          Log.d("GRAPH", "1 : " + indexOfVertex1InPath);
+          Log.d("GRAPH", "2 : " + indexOfVertex2InPath);
+          if (indexOfVertex1InPath > -1 && indexOfVertex2InPath > -1) {
+            // path exists
+            if ((indexOfVertex2InPath - indexOfVertex1InPath == 1)
+                    || (indexOfVertex1InPath - indexOfVertex2InPath == 1)) {
+              isHighlighted = true;
+            }
           }
         }
         drawEdge(canvas, vertex.index, neighbour.index, weight, isHighlighted);
