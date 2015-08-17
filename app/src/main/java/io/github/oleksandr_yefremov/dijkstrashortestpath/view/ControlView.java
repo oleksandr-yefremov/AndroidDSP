@@ -14,7 +14,7 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.presenter.PresenterInte
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.ViewInterface.ControlViewInterface;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Control view: number of graph vertices and incr/decr buttons.
  */
 public class ControlView extends Fragment implements ControlViewInterface {
 
@@ -22,8 +22,6 @@ public class ControlView extends Fragment implements ControlViewInterface {
   private static final int MAX_VERTICES = 10;
 
   private MainPresenterInterface presenter;
-
-  private Button minusButton, plusButton;
   private TextView vertCounter;
 
   public void setPresenter(MainPresenterInterface presenter) {
@@ -34,8 +32,8 @@ public class ControlView extends Fragment implements ControlViewInterface {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     View inflatedView = inflater.inflate(R.layout.fragment_control, container, false);
-    minusButton = (Button) inflatedView.findViewById(R.id.minusButton);
-    plusButton = (Button) inflatedView.findViewById(R.id.plusButton);
+    Button minusButton = (Button) inflatedView.findViewById(R.id.minusButton);
+    Button plusButton = (Button) inflatedView.findViewById(R.id.plusButton);
     vertCounter = (TextView) inflatedView.findViewById(R.id.vertCounter);
 
     minusButton.setOnClickListener(new OnClickListener() {

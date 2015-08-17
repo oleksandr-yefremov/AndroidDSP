@@ -16,6 +16,8 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.view.ViewInterface.Grap
  * TODO: javadoc
  */
 public class MainPresenter implements MainPresenterInterface {
+
+  // Explicit dependencies. Set via setter injection
   private final GraphViewInterface graphView;
   private final ControlViewInterface controlView;
   private final GraphInteractor graphInteractor;
@@ -44,7 +46,6 @@ public class MainPresenter implements MainPresenterInterface {
     int count = controlView.updateVertCount(increment);
     graphInteractor.updateGraph(count);
     graphView.updateGraph(graphInteractor.getGraph());
-    graphView.updateEdges();
   }
 
   @Override
@@ -62,10 +63,11 @@ public class MainPresenter implements MainPresenterInterface {
     }
     selectedVerticesList.add(index);
     graphView.updateSelectedVertices(selectedVerticesList);
+    // when 2 vertices are selected, calculate and show shortest path between them
     if (selectedVerticesList.size() == 2) {
-      graphView.showPath(graphInteractor.calculateShortestPath(selectedVerticesList.get(0), selectedVerticesList.get(1)));
+      graphView.showPath(graphInteractor.calculateShortestPath(
+        selectedVerticesList.get(0), selectedVerticesList.get(1)));
     }
   }
-
 
 }

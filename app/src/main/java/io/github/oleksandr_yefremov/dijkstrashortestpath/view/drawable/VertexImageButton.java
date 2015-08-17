@@ -7,9 +7,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 /**
- * Class which represents graph vertex view. Holds vertex index and responds to click events.
+ * Represents graph vertex view. Holds vertex index and responds to click events.
  */
 public class VertexImageButton extends CircularImageView {
+  /** Index of current vertex in graph (sometimes called <em>name</em>) */
   private int index = -1;
 
   public VertexImageButton(Context context) {

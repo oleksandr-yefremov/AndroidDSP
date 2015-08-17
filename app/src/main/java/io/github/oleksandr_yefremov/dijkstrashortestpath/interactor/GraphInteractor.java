@@ -7,25 +7,15 @@ import java.util.List;
 
 import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph;
 
+/**
+ * Contains business logic for graph manipulation as specified by a use case.
+ */
 public class GraphInteractor {
 
-  //  private EdgeWeightedGraph graph = new EdgeWeightedGraph(10, 10);
   private Graph graph;
 
   public GraphInteractor() {
-//    edges = new Edge[]{
-//      new Graph.Edge(0, 1, 7),
-//      new Graph.Edge(1, 2, 9),
-//      new Graph.Edge(0, 5, 14),
-//      new Graph.Edge(1, 2, 10),
-//      new Graph.Edge(1, 3, 15),
-//      new Graph.Edge(2, 3, 11),
-//      new Graph.Edge(2, 5, 2),
-//      new Graph.Edge(3, 4, 6),
-//      new Graph.Edge(4, 5, 9),
-//    };
-//    graph = new Graph(edges);
-    graph = new Graph(4);
+//    graph = new Graph(4);
   }
 
   public Graph getGraph() {

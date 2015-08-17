@@ -1,7 +1,7 @@
 <io.github.oleksandr_yefremov.dijkstrashortestpath.view.drawable.VertexImageButton
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/vertButton"
+    android:id="@+id/vertexButton"
     android:layout_width="@dimen/Default.Vertex.Size"
     android:layout_height="@dimen/Default.Vertex.Size"
     android:layout_gravity="center"
@@ -11,5 +11,3 @@
     app:civ_selectorStrokeWidth="5dp"
     app:civ_border="true"
     />
-    <!--app:civ_borderColor="@android:color/holo_blue_light"-->
-    <!--app:civ_borderWidth="0dp"-->

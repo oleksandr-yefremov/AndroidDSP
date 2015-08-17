@@ -9,10 +9,7 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph;
 
 public class ViewInterface {
   public interface GraphViewInterface {
-    void updateEdges();
     void updateGraph(Graph graph);
-
-//    void updateVertices(int count);
 
     void updateSelectedVertices(List<Integer> selectedVertices);
 
@@ -22,6 +19,6 @@ public class ViewInterface {
   }
 
   public interface ControlViewInterface {
-    int updateVertCount(boolean incr);
+    int updateVertCount(boolean increment);
   }
 }

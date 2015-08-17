@@ -2,6 +2,7 @@ package io.github.oleksandr_yefremov.dijkstrashortestpath.view;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +22,15 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.view.drawable.VertexIma
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.layout.GraphLayout;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Graph view. Shows clickable vertices and edges between them
+ * (edges can be highlighted with showPath() method)
  */
 public class GraphView extends Fragment implements GraphViewInterface {
 
   private MainPresenterInterface presenter;
   private GraphLayout graphLayout;
 
-  public void setPresenter(MainPresenterInterface presenter) {
+  public void setPresenter(@NonNull MainPresenterInterface presenter) {
     this.presenter = presenter;
   }
 
@@ -40,15 +42,8 @@ public class GraphView extends Fragment implements GraphViewInterface {
     return graphLayout;
   }
 
-//  private void createVertices(int number) {
-//    graphLayout.removeAllViewsInLayout();
-//    for (int i = 0; i < number; ++i) {
-//      createVertex(i, graphLayout);
-//    }
-//  }
-
   private void createVertex(Vertex vertex, ViewGroup containerLayout) {
-    final VertexImageButton vertButton = (VertexImageButton) getLayoutInflater(null)
+    final VertexImageButton vertexButton = (VertexImageButton) getLayoutInflater(null)
       .inflate(R.layout.view_vertex, containerLayout, false);
 
     int size = getResources().getDimensionPixelSize(R.dimen.Default_Vertex_Size);
@@ -62,20 +57,15 @@ public class GraphView extends Fragment implements GraphViewInterface {
       .endConfig()
       .buildRect(String.valueOf(vertex.index), Color.TRANSPARENT);
 
-    vertButton.setImageDrawable(textAvatarDrawable);
-    vertButton.setIndex(vertex.index);
-    vertButton.setOnClickListener(new OnClickListener() {
+    vertexButton.setImageDrawable(textAvatarDrawable);
+    vertexButton.setIndex(vertex.index);
+    vertexButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        presenter.vertexClicked(vertButton.getIndex());
+        presenter.vertexClicked(vertexButton.getIndex());
       }
     });
-    containerLayout.addView(vertButton);
-  }
-
-  @Override
-  public void updateEdges() {
-
+    containerLayout.addView(vertexButton);
   }
 
   @Override
@@ -91,11 +81,6 @@ public class GraphView extends Fragment implements GraphViewInterface {
       createVertex(vertices.get(i), graphLayout);
     }
   }
-
-//  @Override
-//  public void updateVertices(int count) {
-//    createVertices(count);
-//  }
 
   @Override
   public void updateSelectedVertices(List<Integer> selectedVertices) {

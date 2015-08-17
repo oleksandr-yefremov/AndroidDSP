@@ -29,10 +29,6 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph.Vertex;
  */
 public class GraphLayout extends FrameLayout {
 
-  /**
-   * Map[Pair[Vertex1, Vertex2], Weight]
-   */
-//  private static final Map<Pair<Integer, Integer>, Float> GRAPH = new HashMap<>();
   private Graph graph;
   private static final float Y_OFFSET = -5f;
 
@@ -133,7 +129,7 @@ public class GraphLayout extends FrameLayout {
     int b = topWithMargins + height;
     view.layout(l, t, r, b);
 
-    // save vertex position
+    // save vertex draw position
     verticesPositionMap.put(vertIndex, new VertexPos(l, t, r, b));
   }
 
@@ -148,22 +144,21 @@ public class GraphLayout extends FrameLayout {
 
     // draw edges and weights
     for (Vertex vertex : graph.getAllVertices()) {
-//      float weight = vertex.weight;
       for (Vertex neighbour : vertex.neighbours.keySet()) {
         int weight = vertex.neighbours.get(neighbour);
 
         boolean isHighlighted = false;
 
-        // highlight shortest path between two vertices
+        // highlight following edges
         if (highlightedEdges != null) {
           int indexOfVertex1InPath = highlightedEdges.indexOf(vertex.index);
           int indexOfVertex2InPath = highlightedEdges.indexOf(neighbour.index);
           Log.d("GRAPH", "1 : " + indexOfVertex1InPath);
           Log.d("GRAPH", "2 : " + indexOfVertex2InPath);
-          if (indexOfVertex1InPath > -1 && indexOfVertex2InPath > -1) {
-            // path exists
+          if (indexOfVertex1InPath > -1 && indexOfVertex2InPath > -1) { // path exists
+            // graph is undirected
             if ((indexOfVertex2InPath - indexOfVertex1InPath == 1)
-                    || (indexOfVertex1InPath - indexOfVertex2InPath == 1)) {
+                || (indexOfVertex1InPath - indexOfVertex2InPath == 1)) {
               isHighlighted = true;
             }
           }
@@ -187,6 +182,8 @@ public class GraphLayout extends FrameLayout {
     Path path = new Path();
     PointF v1, v2;
 
+    // direction of edge path determines direction of edge weight text,
+    // i.e. we don't want upside down text
     if (vertex1Pos.r < vertex2Pos.r) {
       // draw left to right
       v1 = new PointF(vertex1Pos.r - (vertex1Pos.r - vertex1Pos.l) / 2,
@@ -218,6 +215,7 @@ public class GraphLayout extends FrameLayout {
 
   @Override
   public boolean onInterceptTouchEvent(MotionEvent event) {
+    // let children views handle event
     return false;
   }
 
