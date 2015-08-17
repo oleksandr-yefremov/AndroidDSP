@@ -1,3 +1,6 @@
+/**
+ * Created by Oleksandr Yefremov.
+ */
 package io.github.oleksandr_yefremov.dijkstrashortestpath.view.layout;
 
 import android.annotation.TargetApi;
@@ -25,7 +28,10 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph;
 import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph.Vertex;
 
 /**
- * Created by Oleksandr Yefremov.
+ * View that draws graph. Delegates all touch events to its children
+ * ({@link io.github.oleksandr_yefremov.dijkstrashortestpath.view.drawable.VertexImageButton})
+ * <p>
+ * Use {@link #updateGraph(Graph)} method to set current graph and draw it.
  */
 public class GraphLayout extends FrameLayout {
 

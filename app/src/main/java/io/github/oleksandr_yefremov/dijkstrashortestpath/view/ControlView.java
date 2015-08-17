@@ -1,3 +1,6 @@
+/**
+ * Created by Oleksandr Yefremov.
+ */
 package io.github.oleksandr_yefremov.dijkstrashortestpath.view;
 
 import android.os.Bundle;

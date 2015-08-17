@@ -1,3 +1,6 @@
+/**
+ * Created by Oleksandr Yefremov.
+ */
 package io.github.oleksandr_yefremov.dijkstrashortestpath.view;
 
 import android.graphics.Color;
@@ -22,8 +25,9 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.view.drawable.VertexIma
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.layout.GraphLayout;
 
 /**
- * Graph view. Shows clickable vertices and edges between them
- * (edges can be highlighted with showPath() method)
+ * Fragment which contains GraphLayout.
+ * Only updates its visual state (selected vertices, show/hide path).
+ * Can be made even thinner by moving this code down into GraphLayout itself.
  */
 public class GraphView extends Fragment implements GraphViewInterface {
 

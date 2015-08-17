@@ -7,7 +7,11 @@ import java.util.List;
 
 import io.github.oleksandr_yefremov.dijkstrashortestpath.entity.Graph;
 
+/**
+ * Holder for all view interfaces.
+ */
 public class ViewInterface {
+
   public interface GraphViewInterface {
     void updateGraph(Graph graph);
 

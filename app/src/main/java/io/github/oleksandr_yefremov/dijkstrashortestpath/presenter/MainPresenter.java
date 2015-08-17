@@ -13,7 +13,9 @@ import io.github.oleksandr_yefremov.dijkstrashortestpath.view.ViewInterface.Cont
 import io.github.oleksandr_yefremov.dijkstrashortestpath.view.ViewInterface.GraphViewInterface;
 
 /**
- * TODO: javadoc
+ * MV<strong>P</strong> : <em>Presenter</em> contains view logic for preparing content for display
+ * (as received from the <em>Interactor</em>) and for reacting to user inputs
+ * (by requesting new data from the <em>Interactor</em>).
  */
 public class MainPresenter implements MainPresenterInterface {
 
@@ -41,6 +43,10 @@ public class MainPresenter implements MainPresenterInterface {
     updateGraph(true);
   }
 
+  /**
+   * Update graph by adding/substituting one vertex
+   * @param increment
+   */
   private void updateGraph(boolean increment) {
     selectedVerticesList.clear();
     int count = controlView.updateVertCount(increment);
