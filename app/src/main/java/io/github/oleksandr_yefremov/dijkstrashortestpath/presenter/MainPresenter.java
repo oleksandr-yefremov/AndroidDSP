@@ -31,6 +31,8 @@ public class MainPresenter implements MainPresenterInterface {
     this.graphView = graphView;
     this.controlView = controlView;
     this.graphInteractor = graphInteractor;
+
+    updateGraph(false);
   }
 
   @Override
